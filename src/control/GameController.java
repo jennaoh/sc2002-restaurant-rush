@@ -2,7 +2,7 @@ package control;
 
 import entity.*;
 import staff.Staff;
-import boundary.ConsoleUI;
+import boundary.*;
 
 public class GameController {
     private Restaurant restaurant;
@@ -54,26 +54,48 @@ public class GameController {
         spawnCustomer(turn); // call spawn customer, will spawn customer on certain turns
         restaurant.clearNewlyReadyToPayThisTurn();
         ui.displayTurnStart(restaurant, currentTurn);
+
         // Reset task counter for each staff member at the start of each turn
         for (Staff member : restaurant.getStaff()) {
             member.resetTurn();
         }
-        // Manager choices, waiter and chef actions
-        restaurant.executeWaiterAction(ui.promptWaiterAction(restaurant), currentTurn);
-        restaurant.executeChefAction(ui.promptChefAction(restaurant));
+        // Manager choices: waiter and chef actions
+        handleWaiterAction(turn);
+        handleChefAction();
 
         // Eating and Payment
         restaurant.updateEatingCustomers(turn);
         restaurant.processCashierPayment();
         restaurant.applySatisfactionDecay();
 
-        /*
-         * old code
-         * if (turn != currentTurn) {
-         * currentTurn = turn;
-         * // newlyReadyToPayThisTurn.clear();
-         * }
-         */
+    }
+
+    private void handleWaiterAction(int turn) {
+        boolean actionCompleted = false;
+        while (!actionCompleted) {
+            try {
+                WaiterAction action = ui.promptWaiterAction(restaurant);
+                restaurant.executeWaiterAction(action, turn);
+                actionCompleted = true; // Succeeded, exit loop
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                ui.displayError(e.getMessage());
+                // Loops back and re-prompts the user
+            }
+        }
+    }
+
+    private void handleChefAction() {
+        boolean actionCompleted = false;
+        while (!actionCompleted) {
+            try {
+                ChefAction action = ui.promptChefAction(restaurant);
+                restaurant.executeChefAction(action);
+                actionCompleted = true; // Succeeded, exit loop
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                ui.displayError(e.getMessage());
+                // Loops back and re-prompts the user
+            }
+        }
     }
 
     // adds a customer on turns 1, 4, 7, 10, 13 and 16.

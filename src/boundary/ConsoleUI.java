@@ -22,7 +22,10 @@ public class ConsoleUI {
         // Occupied tables display
         System.out.println("Occupied Tables: " + res.getOccupiedTables());
         // Customer satisfaction display
+        // to do: edit to display cust id andsatisfaction only
         System.out.println("All customers: " + res.getAllCustomers());
+        // Display orders
+        System.out.println("Active Orders: " + res.getOrders());
         // Staff tasks available
         System.out.println("Staff tasks available: "); // idk
     }
