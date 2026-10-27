@@ -11,7 +11,6 @@ public class ConsoleUI {
         // Print waiting queue and tables
         // Print customers, orders and available tasks
     }
-
     
 public WaiterAction promptWaiterAction(Restaurant res) {
 
@@ -95,12 +94,11 @@ public ChefAction promptChefAction(Restaurant res) {
         // Print end-of-turn statistics
     }
 
-    public void displayFinalResult(Restaurant res, boolean won) {
+    public void displayFinalResult(boolean won) {
         System.out.println(won ? "VICTORY!" : "DEFEAT!");
         // Print final statistics
     }
 
-    
     private int readInt(String message) {
         while (true) {
             System.out.print(message);

@@ -18,7 +18,6 @@ import staff.Cashier;
 //manages the restaurant's game state and business rules
 public class Restaurant {
 
-    private static final int MAX_TURNS = 18;
     private static final int SATISFACTION_LOSS = 8;
 
     private int revenueCents = 0;
@@ -51,42 +50,6 @@ public class Restaurant {
         staff.add(new Waiter());
         staff.add(new Chef());
         staff.add(new Cashier());
-    }
-
-    // TURN MANAGEMENT
-    //starts a new turn and resets each staff member's task limit
-    //calling this repeatedly for the same turn does not reset staff tasks a second time
-    public void startTurn(int turn) {
-        if (turn < 1 || turn > MAX_TURNS) {
-            throw new IllegalArgumentException(
-                    "Turn must be between 1 and " + MAX_TURNS);
-        }
-
-        if (turn != currentTurn) {
-            currentTurn = turn;
-            newlyReadyToPayThisTurn.clear();
-            
-            for (Staff member : staff) {
-                member.resetTurn();
-            }
-        }
-    }
-
-    //adds a customer on turns 1, 4, 7, 10, 13 and 16.
-    //call this method every turn, even when no customer arrives
-    public void spawnCustomer(int turn) {
-
-        startTurn(turn);
-
-        boolean isArrivalTurn =
-                turn == 1 ||(turn >= 4 && turn <= 16 && (turn - 4) % 3==0);
-
-        if (isArrivalTurn) {
-            Customer customer = new Customer(nextCustomerId, turn);
-
-            waitingQueue.offer(customer);
-            nextCustomerId++;
-        }
     }
 
     // WAITER ACTIONS
