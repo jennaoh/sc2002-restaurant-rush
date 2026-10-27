@@ -1,4 +1,4 @@
-package src.boundary;
+package boundary;
 
 public class WaiterAction {
 
@@ -12,13 +12,11 @@ public class WaiterAction {
 
     private Type type;
     private int targetId;
-    private int tableId;
 
     // Constructor
-    public WaiterAction(Type type, int targetId, int tableId) {
+    public WaiterAction(Type type, int targetId) {
         this.type = type;
         this.targetId = targetId;
-        this.tableId = tableId;
     }
 
     // Getters
@@ -28,9 +26,5 @@ public class WaiterAction {
 
     public int getTargetId() {
         return targetId;
-    }
-
-    public int getTableId() {
-        return tableId;
     }
 }

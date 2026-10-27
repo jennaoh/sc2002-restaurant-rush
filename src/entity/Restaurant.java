@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import control.WaiterAction;
-import control.ChefAction;
+import boundary.WaiterAction;
+import boundary.ChefAction;
 import staff.Staff;
 import staff.Waiter;
 import staff.Chef;
@@ -31,31 +31,29 @@ public class Restaurant {
     private final Menu menu = new Menu();
     private final List<Staff> staff = new ArrayList<>();
 
-    private int nextCustomerId = 0;
-    private int nextOrderId = 0;
-    private int currentTurn = 0;
+    private int nextOrderId = 1;
 
-    //customers who became READY_TO_PAY during this turn, they must not pay until a subsequent turn
-    private final Set<Integer> newlyReadyToPayThisTurn =
-            new HashSet<>();
+    // customers who became READY_TO_PAY during this turn, they must not pay until a
+    // subsequent turn
+    private final Set<Integer> newlyReadyToPayThisTurn = new HashSet<>();
 
-    //constructor
+    // constructor
     public Restaurant() {
 
-        //create two tables
+        // create two tables
         tables.add(new Table(1));
         tables.add(new Table(2));
 
-        //create one staff member of each type.
+        // create one staff member of each type.
         staff.add(new Waiter());
         staff.add(new Chef());
         staff.add(new Cashier());
     }
 
     // WAITER ACTIONS
-    //executes one Waiter action
+    // executes one Waiter action
     public void executeWaiterAction(WaiterAction action, int turn) {
-        startTurn(turn);
+        // startTurn(turn);
 
         if (action == null) {
             throw new IllegalArgumentException("Waiter action cannot be null.");
@@ -66,17 +64,15 @@ public class Restaurant {
 
         Waiter waiter = getWaiter();
 
-        //waiting does not change the restaurant state
+        // waiting does not change the restaurant state
         if (type.equals("WAIT")) {
             return;
         }
 
         switch (type) {
 
-            case "SEAT":
-            case "SEATCUSTOMER": {
-
-                //target -1 means the customer at the front of the waiting queue
+            case "SEAT": {
+                // target -1 means the customer at the front of the waiting queue
                 Customer customer;
 
                 if (targetId == -1) {
@@ -86,7 +82,7 @@ public class Restaurant {
                 }
 
                 if (customer == null) {
-                    throw new IllegalArgumentException( "That customer is not in the waiting queue.");
+                    throw new IllegalArgumentException("That customer is not in the waiting queue.");
                 }
 
                 Table freeTable = findFreeTable();
@@ -95,18 +91,15 @@ public class Restaurant {
                     throw new IllegalStateException("There are no free tables.");
                 }
 
-                //waiter validates the action and uses one task
+                // waiter validates the action and uses one task
                 waiter.seatCustomer(customer, freeTable);
 
-                //remove the seated customer from the queue
+                // remove the seated customer from the queue
                 waitingQueue.remove(customer);
                 break;
             }
 
-            case "TAKEORDER":
-            case "TAKECUSTOMERORDER":
-            case "ORDER": {
-
+            case "TAKE_ORDER": {
                 Table table = findTableByNumber(targetId);
 
                 if (table == null) {
@@ -122,8 +115,7 @@ public class Restaurant {
                 break;
             }
 
-            case "SERVE":
-            case "SERVEORDER": {
+            case "SERVE": {
 
                 Order order = findOrderById(targetId);
 
@@ -131,8 +123,9 @@ public class Restaurant {
                     throw new IllegalArgumentException("Order " + targetId + " does not exist.");
                 }
 
-                //Waiter checks that the order is already READY
-                //the controller must execute this action before the Chef action during each turn
+                // Waiter checks that the order is already READY
+                // the controller must execute this action before the Chef action during each
+                // turn
                 waiter.serveOrder(order, turn);
                 break;
             }
@@ -156,22 +149,18 @@ public class Restaurant {
         }
         switch (type) {
 
-            case "PREPARE":
-            case "PREPAREORDER":
-            case "ADVANCEPREP":
-            case "ADVANCEPREPARATION":
-            case "COOK": {
+            case "PREPARE": {
 
-                int targetId = action.getTargetId();
-                Order order = findOrderById(targetId);
+                Order order = findOrderById(action.getOrderId());
 
                 if (order == null) {
                     throw new IllegalArgumentException(
-                            "Order " + targetId + " does not exist.");
+                            "Order " + action.getOrderId() + " does not exist.");
                 }
 
-                //chef advances the selected order by exactly one preparation unit
-                //this also allows the Chef to work on an order taken by the Waiter earlier in the same turn
+                // chef advances the selected order by exactly one preparation unit
+                // this also allows the Chef to work on an order taken by the Waiter earlier in
+                // the same turn
                 getChef().prepareOrder(order);
                 break;
             }
@@ -183,11 +172,13 @@ public class Restaurant {
     }
 
     // EATING AND PAYMENT
-    // customers served on an earlier turn finish one full turn of eating and become READY_TO_PAY
-    //this method records customers who became READY_TO_PAY, during this turn, so they cannot pay immediately
+    // customers served on an earlier turn finish one full turn of eating and become
+    // READY_TO_PAY
+    // this method records customers who became READY_TO_PAY, during this turn, so
+    // they cannot pay immediately
     public void updateEatingCustomers(int turn) {
 
-        startTurn(turn);
+        // startTurn(turn);
 
         for (Table table : tables) {
 
@@ -208,7 +199,8 @@ public class Restaurant {
         }
     }
 
-    //automatically processes at most one eligible payment, the oldest eligible customer pays first
+    // automatically processes at most one eligible payment, the oldest eligible
+    // customer pays first
     public Customer processCashierPayment() {
 
         Cashier cashier = getCashier();
@@ -219,7 +211,7 @@ public class Restaurant {
 
         Customer oldestCustomer = null;
 
-        //find the oldest eligible customer at a table
+        // find the oldest eligible customer at a table
         for (Table table : tables) {
 
             Customer customer = table.getCustomer();
@@ -228,28 +220,25 @@ public class Restaurant {
                 continue;
             }
 
-            if (customer.getStatus()
-                    != CustomerStatus.READY_TO_PAY) {
+            if (customer.getStatus() != CustomerStatus.READY_TO_PAY) {
                 continue;
             }
 
-            //a customer who became ready this turn cannot pay yet
+            // a customer who became ready this turn cannot pay yet
             if (newlyReadyToPayThisTurn.contains(customer.getId())) {
                 continue;
             }
 
             if (oldestCustomer == null
-                    || customer.getArrivalTurn()
-                       < oldestCustomer.getArrivalTurn()
-                    || (customer.getArrivalTurn()
-                        == oldestCustomer.getArrivalTurn()
-                        && customer.getId() < oldestCustomer.getId())) {
+                    || customer.getArrivalTurn() < oldestCustomer.getArrivalTurn()
+                    || (customer.getArrivalTurn() == oldestCustomer.getArrivalTurn()
+                            && customer.getId() < oldestCustomer.getId())) {
 
                 oldestCustomer = customer;
             }
         }
 
-        //no eligible payment this turn
+        // no eligible payment this turn
         if (oldestCustomer == null) {
             return null;
         }
@@ -262,33 +251,35 @@ public class Restaurant {
                     "Customer, order or table state is inconsistent.");
         }
 
-        //cashier marks the customer and order as paid and frees the table
+        // cashier marks the customer and order as paid and frees the table
         int amountPaid = cashier.collectPayment(
                 oldestCustomer, order, table);
 
         revenueCents += amountPaid;
-        
+
         paidCustomers.add(oldestCustomer);
 
         return oldestCustomer;
     }
 
     // SATISFACTION AND ABANDONMENT
-    //reduces satisfaction by 8 for each customer who is still waiting, seated or ordered but has not been served
-    //customers reaching zero satisfaction abandon the restaurant, their unfinished orders are cancelled and their tables freed
+    // reduces satisfaction by 8 for each customer who is still waiting, seated or
+    // ordered but has not been served
+    // customers reaching zero satisfaction abandon the restaurant, their unfinished
+    // orders are cancelled and their tables freed
     public List<Customer> applySatisfactionDecay() {
 
         List<Customer> candidates = new ArrayList<>();
         Set<Integer> includedIds = new HashSet<>();
 
-        //include customers in the waiting queue
+        // include customers in the waiting queue
         for (Customer customer : waitingQueue) {
             if (includedIds.add(customer.getId())) {
                 candidates.add(customer);
             }
         }
 
-        //include customers occupying tables
+        // include customers occupying tables
         for (Table table : tables) {
 
             Customer customer = table.getCustomer();
@@ -306,8 +297,7 @@ public class Restaurant {
 
             CustomerStatus status = customer.getStatus();
 
-            boolean hasNotBeenServed =
-                    status == CustomerStatus.WAITING_IN_QUEUE
+            boolean hasNotBeenServed = status == CustomerStatus.WAITING_IN_QUEUE
                     || status == CustomerStatus.SEATED
                     || status == CustomerStatus.ORDERED;
 
@@ -327,20 +317,20 @@ public class Restaurant {
         return abandonedCustomers;
     }
 
-    //handles a customer who reaches zero satisfaction
+    // handles a customer who reaches zero satisfaction
     private void abandonCustomer(Customer customer) {
 
-        //remove the customer from the queue, if in queue
+        // remove the customer from the queue, if in queue
         waitingQueue.remove(customer);
 
-        //if seated, free the customer's table
+        // if seated, free the customer's table
         Table table = findTableForCustomer(customer);
 
         if (table != null) {
             table.clear();
         }
 
-        //cancel any order that has not been paid
+        // cancel any order that has not been paid
         Order order = customer.getOrder();
 
         if (order != null
@@ -404,7 +394,7 @@ public class Restaurant {
         return null;
     }
 
-    //find the required staff member from the staff list
+    // find the required staff member from the staff list
     private <T extends Staff> T findStaff(Class<T> staffType) {
 
         for (Staff member : staff) {
@@ -417,6 +407,16 @@ public class Restaurant {
         throw new IllegalStateException("Staff member not found: " + staffType.getSimpleName());
     }
 
+    public void addWaitingCustomer(Customer customer) {
+        waitingQueue.offer(customer);
+    }
+
+    // to be called by game controller to clear this list
+    public void clearNewlyReadyToPayThisTurn() {
+        newlyReadyToPayThisTurn.clear();
+    }
+
+    // GETTERS
     public Waiter getWaiter() {
         return findStaff(Waiter.class);
     }
@@ -429,7 +429,6 @@ public class Restaurant {
         return findStaff(Cashier.class);
     }
 
-    //GETTERS
     public int getRevenueCents() {
         return revenueCents;
     }
@@ -442,19 +441,12 @@ public class Restaurant {
         return unhappyDepartures;
     }
 
-    public int getCurrentTurn() {
-        return currentTurn;
-    }
-
-    public int getTotalCustomersArrived() {
-        return nextCustomerId;
-    }
-
     public int getPaidCustomerCount() {
         return paidCustomers.size();
     }
 
-    //counts orders that have been served, including orders whose customers have subsequently paid
+    // counts orders that have been served, including orders whose customers have
+    // subsequently paid
     public int getServedCount() {
         int count = 0;
         for (Order order : orders) {
@@ -465,7 +457,8 @@ public class Restaurant {
         return count;
     }
 
-    //returns the mean satisfaction recorded at payment, NaN when no customers have paid
+    // returns the mean satisfaction recorded at payment, NaN when no customers have
+    // paid
     public double getAveragePaidSatisfaction() {
         if (paidCustomers.isEmpty()) {
             return Double.NaN;
@@ -485,6 +478,28 @@ public class Restaurant {
     public List<Table> getTables() {
         return Collections.unmodifiableList(
                 new ArrayList<>(tables));
+    }
+
+    public List<Table> getOccupiedTables() {
+        List<Table> allTables = getTables();
+        List<Table> occupiedTables = new ArrayList<>();
+        for (Table table : allTables) {
+            if (table.isOccupied()) {
+                occupiedTables.add(table);
+            }
+        }
+        return occupiedTables;
+    }
+
+    // test if this works
+    public List<Customer> getAllCustomers() {
+        List<Customer> allCustomers = new ArrayList<>();
+        allCustomers.addAll(waitingQueue);
+        List<Table> occupiedTables = getOccupiedTables();
+        for (Table table : occupiedTables) {
+            allCustomers.add(table.getCustomer());
+        }
+        return allCustomers;
     }
 
     public Queue<Customer> getWaitingQueue() {

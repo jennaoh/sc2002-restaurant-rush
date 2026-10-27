@@ -1,4 +1,4 @@
-package src.boundary;
+package boundary;
 
 public class ChefAction {
 
