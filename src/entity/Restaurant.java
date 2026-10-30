@@ -52,9 +52,7 @@ public class Restaurant {
 
     // WAITER ACTIONS
     // executes one Waiter action
-    public void executeWaiterAction(WaiterAction action, int turn) {
-        // startTurn(turn);
-
+    public Order executeWaiterAction(WaiterAction action, int turn) {
         if (action == null) {
             throw new IllegalArgumentException("Waiter action cannot be null.");
         }
@@ -66,7 +64,7 @@ public class Restaurant {
 
         // waiting does not change the restaurant state
         if (type.equals("WAIT")) {
-            return;
+            return null;
         }
 
         switch (type) {
@@ -96,7 +94,7 @@ public class Restaurant {
 
                 // remove the seated customer from the queue
                 waitingQueue.remove(customer);
-                break;
+                return null;
             }
 
             case "TAKE_ORDER": {
@@ -112,7 +110,7 @@ public class Restaurant {
                 orders.add(order);
 
                 nextOrderId++;
-                break;
+                return order;
             }
 
             case "SERVE": {
@@ -127,7 +125,7 @@ public class Restaurant {
                 // the controller must execute this action before the Chef action during each
                 // turn
                 waiter.serveOrder(order, turn);
-                break;
+                return order;
             }
 
             default:
@@ -491,7 +489,6 @@ public class Restaurant {
         return occupiedTables;
     }
 
-    // test if this works
     public List<Customer> getAllCustomers() {
         List<Customer> allCustomers = new ArrayList<>();
         allCustomers.addAll(waitingQueue);

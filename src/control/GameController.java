@@ -4,6 +4,8 @@ import entity.*;
 import staff.Staff;
 import boundary.*;
 
+import java.util.List;
+
 public class GameController {
     private Restaurant restaurant;
     private ConsoleUI ui;
@@ -66,8 +68,12 @@ public class GameController {
         // Eating and Payment
         restaurant.updateEatingCustomers(turn);
         restaurant.processCashierPayment();
-        restaurant.applySatisfactionDecay();
-
+        List<Customer> abandonedCustomersList = restaurant.applySatisfactionDecay();
+        // Check for any abandoned customers and inform the user on the UI
+        if (abandonedCustomersList.size() > 0) {
+            ui.displayDepartures(abandonedCustomersList);
+        }
+        ui.displayTurnSummary(restaurant, turn);
     }
 
     private void handleWaiterAction(int turn) {
@@ -75,7 +81,15 @@ public class GameController {
         while (!actionCompleted) {
             try {
                 WaiterAction action = ui.promptWaiterAction(restaurant);
-                restaurant.executeWaiterAction(action, turn);
+                Order order = restaurant.executeWaiterAction(action, turn);
+                // print order taken or order served information to the user
+                if (order != null) {
+                    if (action.getType() == WaiterAction.Type.TAKE_ORDER) {
+                        ui.displayOrderTaken(order);
+                    } else if (action.getType() == WaiterAction.Type.SERVE) {
+                        ui.displayOrderServed(order);
+                    }
+                }
                 actionCompleted = true; // Succeeded, exit loop
             } catch (IllegalArgumentException | IllegalStateException e) {
                 ui.displayError(e.getMessage());
