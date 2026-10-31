@@ -1,6 +1,6 @@
 package entity;
 
-public class Customer {
+public abstract class Customer {
 	private final int id;
 	private final int arrivalTurn;
 	
@@ -8,6 +8,11 @@ public class Customer {
     private CustomerStatus status;
     private Order order;
     private int turnServed;
+
+    public abstract int getDecayRate();
+    public abstract int calculateBill(int basePriceCents);
+    public abstract MenuItem getOrderPreference(Menu menu);
+    public abstract String getCustomerType();
     
     public Customer(int id, int arrivalTurn) {
         this.id = id;

@@ -303,7 +303,7 @@ public class Restaurant {
                 continue;
             }
 
-            customer.decreaseSatisfaction(SATISFACTION_LOSS);
+            customer.decreaseSatisfaction(customer.getDecayRate());
 
             if (customer.getSatisfaction() == 0) {
 

@@ -114,11 +114,20 @@ public class GameController {
     }
 
     // adds a customer on turns 1, 4, 7, 10, 13 and 16.
-    // call this method every turn, even when no customer arrives
+    // Base run includes 4 Regular, 1 VIP (Turn 7), and 1 Critic (Turn 13)
     public void spawnCustomer(int turn) {
         boolean isArrivalTurn = turn == 1 || (turn >= 4 && turn <= 16 && (turn - 4) % 3 == 0);
         if (isArrivalTurn) {
-            Customer customer = new Customer(nextCustomerId, turn);
+            Customer customer;
+            
+            // Replaces two regular arrivals with at least one VIP and one Critic
+            if (turn == 7) {
+                customer = new VipCustomer(nextCustomerId, turn);
+            } else if (turn == 13) {
+                customer = new CriticCustomer(nextCustomerId, turn);
+            } else {
+                customer = new RegularCustomer(nextCustomerId, turn);
+            }
 
             restaurant.addWaitingCustomer(customer);
             nextCustomerId++;

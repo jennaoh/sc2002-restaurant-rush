@@ -32,7 +32,9 @@ public class Waiter extends Staff {
         if (c == null || c.getStatus() != CustomerStatus.SEATED)
             throw new IllegalStateException("There is no seated customer at that table waiting to order.");
         useTask();
-        Order o = new Order(id, c, m.selectItem(c));
+        //stage 2
+        MenuItem item = c.getOrderPreference(m);
+        Order o = new Order(id, c, item);
         c.setStatus(CustomerStatus.ORDERED);
         return o;
     }
