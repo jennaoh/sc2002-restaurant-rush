@@ -53,15 +53,16 @@ public class GameController {
     // calling this repeatedly for the same turn does not reset staff tasks a second
     // time
     public void startTurn(int turn) {
-        spawnCustomer(turn); // call spawn customer, will spawn customer on certain turns
+        spawnCustomer(turn);
         restaurant.clearNewlyReadyToPayThisTurn();
-        ui.displayTurnStart(restaurant, currentTurn);
 
-        // Reset task counter for each staff member at the start of each turn
+        // Reset staff task counters before displaying start-of-turn info
         for (Staff member : restaurant.getStaff()) {
             member.resetTurn();
         }
-        // Manager choices: waiter and chef actions
+
+        ui.displayTurnStart(restaurant, currentTurn);
+
         handleWaiterAction(turn);
         handleChefAction();
 

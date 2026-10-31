@@ -4,6 +4,10 @@ import entity.*;
 
 /** Advances one order by one preparation unit per turn. */
 public class Chef extends Staff {
+    @Override
+    public String getAvailableTaskDescription() {
+        return hasTaskLeft() ? "1 prep unit available" : "Preparation completed";
+    }
 
     public Chef() { super("Chef", 1); }
 

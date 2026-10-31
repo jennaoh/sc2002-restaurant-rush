@@ -9,7 +9,10 @@ import entity.*;
  * so a failed choice does not cost the manager the task.
  */
 public class Waiter extends Staff {
-
+    @Override
+    public String getAvailableTaskDescription() {
+        return hasTaskLeft() ? "1 task available (Seat / Take Order / Serve)" : "Task completed";
+    }
     public Waiter() { super("Waiter", 1); }
 
     public void seatCustomer(Customer c, Table t) {

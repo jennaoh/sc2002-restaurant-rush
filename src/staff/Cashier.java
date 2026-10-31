@@ -4,6 +4,10 @@ import entity.*;
 
 /** Takes one payment per turn. The controller calls it automatically, oldest customer first. */
 public class Cashier extends Staff {
+    @Override
+    public String getAvailableTaskDescription() {
+        return hasTaskLeft() ? "1 payment eligible (Automated)" : "Payment completed";
+    }
 
     public Cashier() { super("Cashier", 1); }
 

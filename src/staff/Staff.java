@@ -5,6 +5,7 @@ public abstract class Staff {
     private final String name;
     private final int tasksPerTurn;
     private int tasksLeft;
+    public abstract String getAvailableTaskDescription();
 
     protected Staff(String name, int tasksPerTurn) {
         this.name = name;
