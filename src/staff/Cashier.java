@@ -21,6 +21,6 @@ public class Cashier extends Staff {
         c.setStatus(CustomerStatus.PAID);
         t.clear();
         int finalBillCents = c.calculateBill(o.getItem().getPriceCents());
-        return finalBillCents;
+        return o.getBillCents();
     }
 }

@@ -1,41 +1,65 @@
 package entity;
 
-/** One customer's order for one dish. */
 public class Order {
     private final int id;
     private final Customer customer;
     private final MenuItem item;
-    private int prepProgress = 0;
-    private OrderStatus status = OrderStatus.PLACED;
+    private final int billCents; // Locked bill at time of order
+    private int prepProgress;
+    private OrderStatus status;
 
-    public Order(int id, Customer customer, MenuItem item) {
+    public Order(int id, Customer customer, MenuItem item, int billCents) {
         this.id = id;
         this.customer = customer;
         this.item = item;
+        this.billCents = billCents;
+        this.prepProgress = 0;
+        this.status = OrderStatus.PLACED;
     }
 
-    /** Does one preparation unit. Becomes READY when the last unit is done. */
+    public int getId() {
+        return id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public MenuItem getItem() {
+        return item;
+    }
+
+    public int getBillCents() {
+        return billCents;
+    }
+
+    public int getPrepProgress() {
+        return prepProgress;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
     public void advancePrep() {
-        prepProgress++;
-        status = isDone() ? OrderStatus.READY : OrderStatus.IN_PROGRESS;
+        if (prepProgress < item.getPrepUnits()) {
+            prepProgress++;
+        }
+        if (prepProgress == item.getPrepUnits()) {
+            status = OrderStatus.READY;
+        }
     }
 
-    private boolean isDone() { return prepProgress >= item.getPrepUnits(); }
+    public boolean isReady() {
+        return status == OrderStatus.READY;
+    }
 
-    public boolean isReady() { return status == OrderStatus.READY; }
-
-    public int getId() { return id; }
-    public Customer getCustomer() { return customer; }
-    public MenuItem getItem() { return item; }
-    public int getPrepProgress() { return prepProgress; }
-    public OrderStatus getStatus() { return status; }
-    public void setStatus(OrderStatus s) { this.status = s; }
-
-    /** Bill for this order in cents. */
-    public int getBillCents() { return item.getPriceCents(); }
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
-        return String.format("Order#%d %s [%s %d/%d]", id, item.getName(), status, prepProgress, item.getPrepUnits());
+        return "Order#" + id + " " + item.getName() + " [" + status + " " + prepProgress + "/" + item.getPrepUnits() + "]";
     }
 }

@@ -56,13 +56,26 @@ public class GameController {
         spawnCustomer(turn);
         restaurant.clearNewlyReadyToPayThisTurn();
 
+        // 1. HAPPY HOUR PROMPT & ACTIVATION (at start of turn)
+        if (restaurant.getHappyHour().canActivate()) {
+            if (ui.promptActivateHappyHour()) {
+                restaurant.getHappyHour().activate();
+            }
+        }
+
+        // 2. HAPPY HOUR RECOVERY (+15 satisfaction for unserved waiting customers)
+        if (restaurant.getHappyHour().isActive()) {
+            restaurant.applyHappyHourSatisfactionRecovery();
+        }
+
         // Reset staff task counters before displaying start-of-turn info
         for (Staff member : restaurant.getStaff()) {
             member.resetTurn();
         }
 
-        ui.displayTurnStart(restaurant, currentTurn);
+        ui.displayTurnStart(restaurant, turn);
 
+        handleHostAction();
         handleWaiterAction(turn);
         handleChefAction();
 
@@ -70,11 +83,13 @@ public class GameController {
         restaurant.updateEatingCustomers(turn);
         restaurant.processCashierPayment();
         List<Customer> abandonedCustomersList = restaurant.applySatisfactionDecay();
-        // Check for any abandoned customers and inform the user on the UI
         if (abandonedCustomersList.size() > 0) {
             ui.displayDepartures(abandonedCustomersList);
         }
         ui.displayTurnSummary(restaurant, turn);
+
+        // 3. DECREMENT HAPPY HOUR AT TURN END
+        restaurant.getHappyHour().decrementTurn();
     }
 
     private void handleWaiterAction(int turn) {
@@ -109,6 +124,19 @@ public class GameController {
             } catch (IllegalArgumentException | IllegalStateException e) {
                 ui.displayError(e.getMessage());
                 // Loops back and re-prompts the user
+            }
+        }
+    }
+
+    private void handleHostAction() {
+        boolean actionCompleted = false;
+        while (!actionCompleted) {
+            try {
+                HostAction action = ui.promptHostAction(restaurant);
+                restaurant.executeHostAction(action);
+                actionCompleted = true;
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                ui.displayError(e.getMessage());
             }
         }
     }

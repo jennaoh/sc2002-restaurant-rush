@@ -25,6 +25,16 @@ public class RegularCustomer extends Customer {
 
     @Override
     public MenuItem getOrderPreference(Menu m) {
+        // Documented Rule: Customers with odd IDs prefer the ComboMeal
+        if (getId() % 2 != 0) {
+            for (MenuItem item : m.getItems()) {
+                if (item instanceof ComboMenuItem) {
+                    return item;
+                }
+            }
+        }
+
+        // Even IDs (or fallback if no combo exists): follow regular rotation
         return m.selectItem(this);
     }
 }

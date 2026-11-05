@@ -4,16 +4,16 @@ import entity.*;
 
 /**
  * Seats customers, takes orders and serves READY dishes: one task per turn.
- * Every method checks first and throws IllegalStateException with a message
- * if the choice is invalid. The task is used up only after the checks pass,
- * so a failed choice does not cost the manager the task.
  */
 public class Waiter extends Staff {
     @Override
     public String getAvailableTaskDescription() {
         return hasTaskLeft() ? "1 task available (Seat / Take Order / Serve)" : "Task completed";
     }
-    public Waiter() { super("Waiter", 1); }
+
+    public Waiter() { 
+        super("Waiter", 1); 
+    }
 
     public void seatCustomer(Customer c, Table t) {
         if (!hasTaskLeft()) throw new IllegalStateException("Waiter has already acted this turn.");
@@ -26,15 +26,24 @@ public class Waiter extends Staff {
         c.setStatus(CustomerStatus.SEATED);
     }
 
-    public Order takeOrder(Table t, Menu m, int id) {
+    public Order takeOrder(Table t, Menu m, int id, HappyHour happyHour) {
         if (!hasTaskLeft()) throw new IllegalStateException("Waiter has already acted this turn.");
         Customer c = t.getCustomer();
         if (c == null || c.getStatus() != CustomerStatus.SEATED)
             throw new IllegalStateException("There is no seated customer at that table waiting to order.");
         useTask();
-        //stage 2
+
         MenuItem item = c.getOrderPreference(m);
-        Order o = new Order(id, c, item);
+
+        // 1. VIP / Customer discount applied first
+        int priceAfterCustomer = c.calculateBill(item.getPriceCents());
+
+        // 2. Happy Hour discount applied second if active on the happyHour instance
+        int lockedPrice = happyHour.applyDiscount(priceAfterCustomer);
+
+        // 3. Price is locked when order is taken
+        Order o = new Order(id, c, item, lockedPrice);
+        
         c.setStatus(CustomerStatus.ORDERED);
         return o;
     }

@@ -69,6 +69,10 @@ public abstract class Customer {
         }
     }
 
+    public void increaseSatisfaction(int pts) {
+        this.satisfaction = Math.min(100, this.satisfaction + pts);
+    }
+
     @Override
     public String toString() {
         return "Customer " + id

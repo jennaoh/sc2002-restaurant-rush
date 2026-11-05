@@ -28,4 +28,20 @@ public class Menu {
     public MenuItem selectItem(Customer c) {
         return items.get(c.getId() % items.size());
     }
+
+    public MenuItem getItem(String name) {
+        for (MenuItem item : items) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void addItem(MenuItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Menu item cannot be null.");
+        }
+        items.add(item);
+    }
 }

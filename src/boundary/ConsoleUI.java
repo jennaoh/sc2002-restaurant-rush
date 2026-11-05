@@ -43,6 +43,9 @@ public class ConsoleUI {
         for (Staff staff : res.getStaff()) {
             System.out.println(staff.getClass().getSimpleName() + ": " + staff.getAvailableTaskDescription());
         }
+        if (res.getHappyHour().isActive()) {
+            System.out.println(">>> HAPPY HOUR ACTIVE: " + res.getHappyHour().getTurnsRemaining() + " turn(s) remaining! <<<");
+        }
     }
 
     public WaiterAction promptWaiterAction(Restaurant res) {
@@ -72,6 +75,26 @@ public class ConsoleUI {
             }
         }
     }
+    public HostAction promptHostAction(Restaurant res) {
+        while (true) {
+            System.out.println("\nChoose Host Action:");
+            System.out.println("1. Seat Customer");
+            System.out.println("2. Wait");
+
+            int choice = readInt("Enter choice: ");
+
+            switch (choice) {
+                case 1:
+                    int customerId = readInt("Customer ID to seat: ");
+                    return new HostAction(HostAction.Type.SEAT, customerId);
+                case 2:
+                    return new HostAction(HostAction.Type.WAIT, -1);
+                default:
+                    displayError("Please choose 1 or 2.");
+            }
+        }
+    }
+
 
     public void displayOrderTaken(Order order) {
         System.out.println("Order Placed: " + order.getItem().getName()
@@ -150,5 +173,11 @@ public class ConsoleUI {
                 displayError("Please enter a valid number.");
             }
         }
+    }
+
+    public boolean promptActivateHappyHour() {
+        System.out.print("\nActivate Happy Hour this turn (20% off orders, +15 satisfaction recovery for 2 turns)? (y/n): ");
+        String input = scanner.nextLine().trim().toLowerCase();
+        return input.equals("y") || input.equals("yes");
     }
 }

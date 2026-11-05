@@ -10,10 +10,13 @@ import java.util.Set;
 
 import boundary.WaiterAction;
 import boundary.ChefAction;
+import boundary.HostAction;
+
 import staff.Staff;
 import staff.Waiter;
 import staff.Chef;
 import staff.Cashier;
+import staff.Host;
 
 //manages the restaurant's game state and business rules
 public class Restaurant {
@@ -23,6 +26,8 @@ public class Restaurant {
     private int revenueCents = 0;
     private int unhappyDepartures = 0;
 
+    private final HappyHour happyHour = new HappyHour();
+
     private final List<Table> tables = new ArrayList<>();
     private final Queue<Customer> waitingQueue = new ArrayDeque<>();
     private final List<Order> orders = new ArrayList<>();
@@ -30,6 +35,7 @@ public class Restaurant {
 
     private final Menu menu = new Menu();
     private final List<Staff> staff = new ArrayList<>();
+    
 
     private int nextOrderId = 1;
 
@@ -48,8 +54,33 @@ public class Restaurant {
         staff.add(new Waiter());
         staff.add(new Chef());
         staff.add(new Cashier());
-    }
+        staff.add(new Host());
 
+        MenuItem salad = menu.getItem("Salad");
+        MenuItem pasta = menu.getItem("Pasta");
+
+        if (salad != null && pasta != null) {
+            menu.addItem(new ComboMenuItem("Salad+Pasta Combo", salad, pasta));
+        }
+    }
+    public HappyHour getHappyHour() {
+        return happyHour;
+    }
+    public void applyHappyHourSatisfactionRecovery() {
+        if (!happyHour.isActive()) {
+            return;
+        }
+
+        for (Customer c : getAllCustomers()) {
+            CustomerStatus s = c.getStatus();
+            // Customers waiting in queue, seated, or ordered (not yet served food)
+            if (s == CustomerStatus.WAITING_IN_QUEUE 
+                    || s == CustomerStatus.SEATED 
+                    || s == CustomerStatus.ORDERED) {
+                c.increaseSatisfaction(15);
+            }
+        }
+    }
     // WAITER ACTIONS
     // executes one Waiter action
     public Order executeWaiterAction(WaiterAction action, int turn) {
@@ -97,19 +128,30 @@ public class Restaurant {
                 return null;
             }
 
+            // Inside Restaurant.java:
             case "TAKE_ORDER": {
+
                 Table table = findTableByNumber(targetId);
 
                 if (table == null) {
-                    throw new IllegalArgumentException("Table " + targetId + " does not exist.");
+                    throw new IllegalArgumentException(
+                        "Table " + targetId + " does not exist."
+                    );
                 }
 
-                Order order = waiter.takeOrder(table, menu, nextOrderId);
+                // Take order and apply Happy Hour discount
+                Order order = waiter.takeOrder(
+                    table, menu, nextOrderId, happyHour
+                );
 
+                // Assign order to customer
                 order.getCustomer().assignOrder(order);
+
+                // Store order in restaurant
                 orders.add(order);
 
                 nextOrderId++;
+
                 return order;
             }
 
@@ -166,6 +208,56 @@ public class Restaurant {
             default:
                 throw new IllegalArgumentException(
                         "Unknown Chef action: " + type);
+        }
+    }
+
+    // HOST ACTIONS
+    // executes one host action
+    public Order executeHostAction(HostAction action) {
+        if (action == null) {
+            throw new IllegalArgumentException("Host action cannot be null.");
+        }
+
+        String type = action.getType().name();
+        int targetId = action.getTargetId();
+
+        Host host = getHost();
+
+        // waiting does not change the restaurant state
+        if (type.equals("WAIT")) {
+            return null;
+        }
+
+        if (action.getType() == HostAction.Type.SEAT) {
+            // target -1 means the customer at the front of the waiting queue
+            Customer customer;
+
+            if (targetId == -1) {
+                customer = waitingQueue.peek();
+            } else {
+                customer = findWaitingCustomerById(targetId);
+            }
+
+            if (customer == null) {
+                throw new IllegalArgumentException("That customer is not in the waiting queue.");
+            }
+
+            Table freeTable = findFreeTable();
+
+            if (freeTable == null) {
+                throw new IllegalStateException("There are no free tables.");
+            }
+
+            // Host validates the action and uses one task
+            host.seatCustomer(customer, freeTable);
+
+            // remove the seated customer from the queue
+            waitingQueue.remove(customer);
+            return null;
+        }
+
+        else{
+            throw new IllegalArgumentException("Unknown Host action: " + type);
         }
     }
 
@@ -425,6 +517,10 @@ public class Restaurant {
 
     public Cashier getCashier() {
         return findStaff(Cashier.class);
+    }
+
+    public Host getHost() {
+    return findStaff(Host.class);
     }
 
     public int getRevenueCents() {
