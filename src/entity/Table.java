@@ -49,6 +49,7 @@ public class Table {
             return "Table " + tableNumber + " (Available)";
         }
 
-        return "Table " + tableNumber + " (Customer " + currentCustomer.getId() + ")";
+        return "Table " + tableNumber + " (" + currentCustomer.getCustomerType() + " Customer "
+                + currentCustomer.getId() + ")";
     }
 }

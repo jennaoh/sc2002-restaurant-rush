@@ -32,7 +32,7 @@ public class ConsoleUI {
         // Display customer satisfaction scores cleanly
         List<String> satisfactionEntries = new ArrayList<>();
         for (Customer c : res.getAllCustomers()) {
-            satisfactionEntries.add("Customer " + c.getId() + ": " + c.getSatisfaction());
+            satisfactionEntries.add(c.getCustomerType() + " Customer " + c.getId() + ": " + c.getSatisfaction());
         }
         System.out.println("Customer Satisfaction: " + (satisfactionEntries.isEmpty() ? "None" : satisfactionEntries));
 
@@ -44,7 +44,8 @@ public class ConsoleUI {
             System.out.println(staff.getClass().getSimpleName() + ": " + staff.getAvailableTaskDescription());
         }
         if (res.getHappyHour().isActive()) {
-            System.out.println(">>> HAPPY HOUR ACTIVE: " + res.getHappyHour().getTurnsRemaining() + " turn(s) remaining! <<<");
+            System.out.println(
+                    ">>> HAPPY HOUR ACTIVE: " + res.getHappyHour().getTurnsRemaining() + " turn(s) remaining! <<<");
         }
     }
 
@@ -75,6 +76,7 @@ public class ConsoleUI {
             }
         }
     }
+
     public HostAction promptHostAction(Restaurant res) {
         while (true) {
             System.out.println("\nChoose Host Action:");
@@ -94,7 +96,6 @@ public class ConsoleUI {
             }
         }
     }
-
 
     public void displayOrderTaken(Order order) {
         System.out.println("Order Placed: " + order.getItem().getName()
@@ -153,7 +154,8 @@ public class ConsoleUI {
         System.out.println("Served Count: " + res.getServedCount());
         System.out.println("Unhappy Departures: " + res.getUnhappyDepartures());
         System.out.println("Current Revenue: $" + String.format("%.2f", res.getRevenueDollars()));
-        System.out.println("Average Satisfaction of Paid Customers: " + formatAverageSatisfaction(res.getAveragePaidSatisfaction()));
+        System.out.println("Average Satisfaction of Paid Customers: "
+                + formatAverageSatisfaction(res.getAveragePaidSatisfaction()));
         System.out.println("FINISHED TURN " + turn + " OUT OF 18");
         System.out.println((18 - turn) + " TURNS LEFT");
         System.out.println("\nPress Enter to continue...");
@@ -176,8 +178,17 @@ public class ConsoleUI {
     }
 
     public boolean promptActivateHappyHour() {
-        System.out.print("\nActivate Happy Hour this turn (20% off orders, +15 satisfaction recovery for 2 turns)? (y/n): ");
-        String input = scanner.nextLine().trim().toLowerCase();
-        return input.equals("y") || input.equals("yes");
+        while (true) {
+            System.out.print(
+                    "\nActivate Happy Hour this turn (20% off orders, +15 satisfaction recovery for 2 turns)? (y/n): ");
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.equals("y") || input.equals("yes")) {
+                return true;
+            } else if (input.equals("n") || input.equals("no")) {
+                return false;
+            } else {
+                displayError("Please enter 'y' or 'n'.");
+            }
+        }
     }
 }

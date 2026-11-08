@@ -21,8 +21,6 @@ import staff.Host;
 //manages the restaurant's game state and business rules
 public class Restaurant {
 
-    private static final int SATISFACTION_LOSS = 8;
-
     private int revenueCents = 0;
     private int unhappyDepartures = 0;
 
@@ -35,7 +33,6 @@ public class Restaurant {
 
     private final Menu menu = new Menu();
     private final List<Staff> staff = new ArrayList<>();
-    
 
     private int nextOrderId = 1;
 
@@ -63,9 +60,11 @@ public class Restaurant {
             menu.addItem(new ComboMenuItem("Salad+Pasta Combo", salad, pasta));
         }
     }
+
     public HappyHour getHappyHour() {
         return happyHour;
     }
+
     public void applyHappyHourSatisfactionRecovery() {
         if (!happyHour.isActive()) {
             return;
@@ -74,13 +73,14 @@ public class Restaurant {
         for (Customer c : getAllCustomers()) {
             CustomerStatus s = c.getStatus();
             // Customers waiting in queue, seated, or ordered (not yet served food)
-            if (s == CustomerStatus.WAITING_IN_QUEUE 
-                    || s == CustomerStatus.SEATED 
+            if (s == CustomerStatus.WAITING_IN_QUEUE
+                    || s == CustomerStatus.SEATED
                     || s == CustomerStatus.ORDERED) {
                 c.increaseSatisfaction(15);
             }
         }
     }
+
     // WAITER ACTIONS
     // executes one Waiter action
     public Order executeWaiterAction(WaiterAction action, int turn) {
@@ -135,14 +135,12 @@ public class Restaurant {
 
                 if (table == null) {
                     throw new IllegalArgumentException(
-                        "Table " + targetId + " does not exist."
-                    );
+                            "Table " + targetId + " does not exist.");
                 }
 
                 // Take order and apply Happy Hour discount
                 Order order = waiter.takeOrder(
-                    table, menu, nextOrderId, happyHour
-                );
+                        table, menu, nextOrderId, happyHour);
 
                 // Assign order to customer
                 order.getCustomer().assignOrder(order);
@@ -256,7 +254,7 @@ public class Restaurant {
             return null;
         }
 
-        else{
+        else {
             throw new IllegalArgumentException("Unknown Host action: " + type);
         }
     }
@@ -520,7 +518,7 @@ public class Restaurant {
     }
 
     public Host getHost() {
-    return findStaff(Host.class);
+        return findStaff(Host.class);
     }
 
     public int getRevenueCents() {
