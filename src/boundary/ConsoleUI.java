@@ -32,7 +32,7 @@ public class ConsoleUI {
         // Display customer satisfaction scores cleanly
         List<String> satisfactionEntries = new ArrayList<>();
         for (Customer c : res.getAllCustomers()) {
-            satisfactionEntries.add("Customer " + c.getId() + ": " + c.getSatisfaction());
+            satisfactionEntries.add(c.getCustomerType() + " Customer " + c.getId() + ": " + c.getSatisfaction());
         }
         System.out.println("Customer Satisfaction: " + (satisfactionEntries.isEmpty() ? "None" : satisfactionEntries));
 
@@ -130,7 +130,8 @@ public class ConsoleUI {
         System.out.println("Served Count: " + res.getServedCount());
         System.out.println("Unhappy Departures: " + res.getUnhappyDepartures());
         System.out.println("Current Revenue: $" + String.format("%.2f", res.getRevenueDollars()));
-        System.out.println("Average Satisfaction of Paid Customers: " + formatAverageSatisfaction(res.getAveragePaidSatisfaction()));
+        System.out.println("Average Satisfaction of Paid Customers: "
+                + formatAverageSatisfaction(res.getAveragePaidSatisfaction()));
         System.out.println("FINISHED TURN " + turn + " OUT OF 18");
         System.out.println((18 - turn) + " TURNS LEFT");
         System.out.println("\nPress Enter to continue...");

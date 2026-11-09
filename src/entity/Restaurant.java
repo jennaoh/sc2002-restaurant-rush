@@ -18,8 +18,6 @@ import staff.Cashier;
 //manages the restaurant's game state and business rules
 public class Restaurant {
 
-    private static final int SATISFACTION_LOSS = 8;
-
     private int revenueCents = 0;
     private int unhappyDepartures = 0;
 

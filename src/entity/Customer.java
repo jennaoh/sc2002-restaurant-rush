@@ -1,19 +1,22 @@
 package entity;
 
 public abstract class Customer {
-	private final int id;
-	private final int arrivalTurn;
-	
-	private int satisfaction;
+    private final int id;
+    private final int arrivalTurn;
+
+    private int satisfaction;
     private CustomerStatus status;
     private Order order;
     private int turnServed;
 
     public abstract int getDecayRate();
+
     public abstract int calculateBill(int basePriceCents);
+
     public abstract MenuItem getOrderPreference(Menu menu);
+
     public abstract String getCustomerType();
-    
+
     public Customer(int id, int arrivalTurn) {
         this.id = id;
         this.arrivalTurn = arrivalTurn;
@@ -59,7 +62,7 @@ public abstract class Customer {
         this.turnServed = turnServed;
     }
 
-    //decrease satisfaction by the specified points (8 in stage 1)
+    // decrease satisfaction by the specified points (8 in stage 1)
     // with a min of 0, until food is served
     public void decreaseSatisfaction(int pts) {
         if (status == CustomerStatus.WAITING_IN_QUEUE
@@ -71,7 +74,7 @@ public abstract class Customer {
 
     @Override
     public String toString() {
-        return "Customer " + id
+        return getCustomerType() + " Customer " + id
                 + " | Status: " + status
                 + " | Satisfaction: " + satisfaction;
     }
