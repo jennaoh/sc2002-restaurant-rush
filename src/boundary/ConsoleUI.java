@@ -64,6 +64,7 @@ public class ConsoleUI {
                     int customerId = readInt("Customer ID to seat: ");
                     return new WaiterAction(WaiterAction.Type.SEAT, customerId);
                 case 2:
+                    System.out.println("\nOccupied Tables: " + res.getOccupiedTables());
                     int orderTableId = readInt("Table ID to take order from: ");
                     return new WaiterAction(WaiterAction.Type.TAKE_ORDER, orderTableId);
                 case 3:
