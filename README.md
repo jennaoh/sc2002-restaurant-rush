@@ -1,9 +1,9 @@
 # Index
-1. [Overview](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main/README.md#overview)
-   - [Stage Transitions](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main/README.md#stage-transitions)
-     - [Stage 1 -> 2](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main/README.md#stage-1---stage-2)
-     - [Stage 2 -> 3](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main/README.md#stage-2---stage-3)
-2. [How to Compile & Run](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main/README.md#how-to-compile--run)
+1. [Overview](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main#overview)
+   - [Stage Transitions](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main#stage-transitions)
+     - [Stage 1 -> 2](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main#stage-1---stage-2)
+     - [Stage 2 -> 3](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main#stage-2---stage-3)
+2. [How to Compile & Run](https://github.com/jennaoh/sc2002-restaurant-rush/tree/main#how-to-compile--run)
 
 # Overview
 Restaurant Rush game developed in Java. It is split into three stages.
