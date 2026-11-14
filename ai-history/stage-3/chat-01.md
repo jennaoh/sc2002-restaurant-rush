@@ -39,9 +39,9 @@ Each customer subclass overrides getOrderPreference(Menu m) with its own orderin
 -   RegularCustomer:
     -   Odd ID: Searches the menu for a ComboMenuItem.
     -   Even ID (or fallback): Calls Menu.selectItem(Customer c), picking deterministically by ID modulo menu item count (items.get(c.getId() % items.size())).
--   CriticCusto    -   mer:
+-   CriticCustomer:
     -   Always prefers "Burger", falling back to index 0 if not on the -   menu.
--   VipCus    -   tomer:
+-   VipCustomer:
     -   Returns index 0 of the menu items (m.getItems().get(0)).
 
 3. Order Finalization & Pricing
@@ -54,7 +54,7 @@ Once the item is chosen in Waiter.takeOrder(...):
 
 ---
 
-## Conversation 1 — Customer Order Logic
+## Conversation 2 — Customer Type Spawn
 
 **Student:**
 
