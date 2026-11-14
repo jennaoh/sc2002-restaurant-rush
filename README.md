@@ -8,6 +8,27 @@
 # Overview
 Restaurant Rush game developed in Java. It is split into three stages.
 
+# Repository
+**GitHub Repository:** https://github.com/jennaoh/sc2002-restaurant-rush
+## AI Conversation Histories
+Each member's AI-assisted development history is stored in their respective GitHub branch.
+| Member | AI History |
+|---|---|
+| Jenna | https://github.com/jennaoh/sc2002-restaurant-rush/blob/jenna-stage3-docs/ai-history/stage%203/chat-01.md |
+| name | INSERT_LINK |
+
+## Presentation Video
+
+**Video Link:** INSERT_LINK
+
+| Timestamp | Content | Presenter |
+|---|---|---|
+| 00:00–02:00 | Game overview and three stages | TBD |
+| 02:00–06:00 | Gameplay demonstration and outcomes | TBD |
+| 06:00–10:00 | Class diagrams and design evolution | TBD |
+| 10:00–13:00 | Sequence diagram and selected use case | TBD |
+| 13:00–15:00 | Individual contributions and reflections | All members |
+
 | Stage / Git-Tag | Description |
 | ------------- | ------------- |
 | [stage-1](https://github.com/jennaoh/sc2002-restaurant-rush/releases/tag/stage-1)  | Basic game operation, implementing regular customers, menu, waiter, chef, cashier, full turn sequence, win and losing conditions|
