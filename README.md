@@ -15,7 +15,8 @@ Each member's AI-assisted development history is stored in their respective GitH
 | Member | AI History |
 |---|---|
 | Jenna | https://github.com/jennaoh/sc2002-restaurant-rush/blob/jenna-stage3-docs/ai-history/stage%203/chat-01.md |
-| name | INSERT_LINK |
+| Haziq | https://github.com/jennaoh/sc2002-restaurant-rush/blob/hz-branch/ai-history/misc/chat-01.md <br> https://github.com/jennaoh/sc2002-restaurant-rush/blob/hz-branch/ai-history/stage-3/chat-01.md |
+| NAME | LINK_HERE |
 
 ## Presentation Video
 
@@ -23,10 +24,10 @@ Each member's AI-assisted development history is stored in their respective GitH
 
 | Timestamp | Content | Presenter |
 |---|---|---|
-| 00:00–02:00 | Game overview and three stages | TBD |
-| 02:00–06:00 | Gameplay demonstration and outcomes | TBD |
-| 06:00–10:00 | Class diagrams and design evolution | TBD |
-| 10:00–13:00 | Sequence diagram and selected use case | TBD |
+| 00:00–02:00 | Game overview and three stages | Haziq |
+| 02:00–06:00 | Gameplay demonstration and outcomes | Jenna |
+| 06:00–10:00 | Class diagrams and design evolution | Esther |
+| 10:00–13:00 | Sequence diagram and selected use case | Rachel |
 | 13:00–15:00 | Individual contributions and reflections | All members |
 
 | Stage / Git-Tag | Description |
