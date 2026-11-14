@@ -3,8 +3,11 @@
 ## Misc AI Use
 
 **AI Tool:** Gemini 3.8 Flash
-**Project:** SC2002 Restaurant Rush  
+
+**Project:** SC2002 Restaurant Rush
+
 **Stage:** All
+
 **Purpose:** Asking AI the way to compile and run the Java code if someone wasn't using VSCode with extension. It was also a way for me to manually compile each stage to test as the VSCode 'Run' button would sometimes run from cache and would need to be cleared manually which was also annoying. 
 
 ---
