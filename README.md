@@ -41,14 +41,84 @@ Each member's AI-assisted development history is stored in their respective GitH
 ### Stage 1 -> Stage 2
 [GitHub Compare Link](https://github.com/jennaoh/sc2002-restaurant-rush/compare/stage-1...stage-2)
 
-**Changes:**
-text
+### Changes & Reasoning:
+
+**Added Files/Classes:**
+- CriticCustomer.java
+- RegularCustomer.java
+- VipCustomer.java
+
+The above classes was added to accommodate the new customer types (VIP & Critic)
+
+**Classes Changed:**
+- ConsoleUI.java
+   - Edited to print customer type to player
+- GameController.java
+   - Edited spawnCustomer function to spawn the new customer types
+- Customer.java
+   - Changed to an abstract class and become a blueprint for the new customer type classes
+- Restaurant.java
+   - Removed SATISFACTION_LOSS variable which is now handled by each customer type getDecayRate() method
+- Table.java
+   - Edited toString() method to include customer type
+- Cashier.java
+   - TODO
+- Waiter.java
+   - Changed to use customer's getOrderPreference() method as customers(critics) have order preferences
+
+No classes/files were deleted. Any other classes not mentioned above remain unchanged from Stage 1.
+
+-----------
 
 ### Stage 2 -> Stage 3
 [GitHub Compare Link](https://github.com/jennaoh/sc2002-restaurant-rush/compare/stage-2...stage-3)
 
-**Changes:**
-text
+### Changes & Reasoning:
+**Added Files/Classes:**
+
+- HostAction.java
+- ComboMenuItem.java
+- HappyHour.java
+- Host.java
+
+The above classes was added to accommodate the new host role, new combo menu item and happy hour feature.
+
+The files below were added purely for GitHub purpose and has no relation to the game.
+- .gitignore
+- README.md
+
+**Classes Changed:**
+- ConsoleUI.java
+   - Added Happy Hour active indicator
+   - Added promptHostAction() method to ask user for host action
+   - Added promptActivateHappyHour() method to ask user whether they want to activate Happy Hour or not
+- GameController.java
+   - Add Happy Hour logic (e.g: calling ConsoleUI to print it, activating it inside Restaurant class)
+   - Add handleHostAction() method to call ConsoleUI's promptHostAction() and handle any invalid inputs
+- Customer.java
+   - Add increaseSatisfaction() method as Happy Hour will increase customer satisfaction
+- Menu.java
+   - Add getItem() and addItem() methods to facilitate creation of Combo Meal
+- Order.java
+   - Formatting changes
+   - Add billCents variable to lock bill at time of order
+- RegularCustomer.java
+   - Add rule that regular customers with odd IDs will order the new Combo Meal
+- Restaurant.java
+   - Add new Combo Meal to the Menu
+   - Add methods for Happy Hour; getHappyHour() & applyHappyHourSatisfactionRecovery()
+   - Add methods for new Host staff; getHost() & executeHostAction(HostAction action)
+- Waiter.java
+   - Add logic to apply VIP customer discount first before Happy Hour discount
+- Cashier.java
+   - TODO
+
+The classes below was marked as changed on GitHub's compare probably due to how we committed separate commits on Stage 2 & 3 to print customer type for the user.
+In actual fact, there is no change as Stage 2 should already have had these changes made.
+- Table.java
+   - Edited toString() method to include customer type
+- VipCustomer.java
+   - Changed "Vip" to "VIP" in getCustomerType()
 
 # How to Compile & Run
 ```bash
