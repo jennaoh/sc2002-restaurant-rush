@@ -17,10 +17,13 @@
 ## Conversation 1 (Link 1) — Loop and Turn Representation
 
 **Q1. Student:**
+
 Uploaded the draw.io sequence diagram (XML) -- initial draft 
+
 if i have a loop in UML diagram for while turn<=18, do i have to repeat the steps for every turn in UML sequence diagram?
 
 **AI:**
+
 No, you don't need to repeat the steps for every turn. That's the whole point of a loop fragment: it shows the steps **once**, and the guard condition (`[currentTurn <= MAX_TURNS (18)]`) tells the reader "this body runs again for each turn while the condition holds."
 
 Your diagram already does this well. The loop frame contains one generic iteration (Turn 7 as the example), and the note at the top says which turns are shown.
