@@ -10,6 +10,8 @@
 
 **Purpose:** Asking AI the way to compile and run the Java code if someone wasn't using VSCode with extension. It was also a way for me to manually compile each stage to test as the VSCode 'Run' button would sometimes run from cache and would need to be cleared manually which was also annoying. 
 
+Images of AI chat is found [here](https://github.com/jennaoh/sc2002-restaurant-rush/tree/hz-branch/ai-history/misc)
+
 ---
 
 ## Conversation — How to Compile & Run Java without VSCode Extension
