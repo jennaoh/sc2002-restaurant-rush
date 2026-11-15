@@ -17,7 +17,7 @@ Each member's AI-assisted development history is stored in their respective GitH
 | Jenna | https://github.com/jennaoh/sc2002-restaurant-rush/blob/jenna-stage3-docs/ai-history/stage%203/chat-01.md |
 | Haziq | https://github.com/jennaoh/sc2002-restaurant-rush/blob/hz-branch/ai-history/misc/chat-01.md <br> https://github.com/jennaoh/sc2002-restaurant-rush/blob/hz-branch/ai-history/stage-3/chat-01.md |
 | Hui Shin | https://github.com/jennaoh/sc2002-restaurant-rush/blob/huishin-branch/ai-history/misc/chat-01.md |
-| NAME | LINK_HERE |
+| Rachel | https://github.com/jennaoh/sc2002-restaurant-rush/blob/e600b5b454f72c90799641d59f06bf0f69d3c4c9/ai-history/sequencediag-chat.md |
 
 ## Presentation Video
 
