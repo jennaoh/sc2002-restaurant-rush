@@ -3,9 +3,13 @@
 ## Sequence Diagram
 
 **AI Tool:** Claude (Anthropic)
+
 **Project:** SC2002 Restaurant Rush
+
 **Purpose:** UML sequence diagram queries and review 
+
 **Link 1:** https://claude.ai/share/d4156c2c-b44b-4d22-9545-0a379c47c68a
+
 **Link 2:** https://claude.ai/share/129f945a-e58c-4859-ac15-379a8e27eefb
 
 ---
