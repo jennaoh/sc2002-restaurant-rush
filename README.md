@@ -21,15 +21,15 @@ Each member's AI-assisted development history is stored in their respective GitH
 
 ## Presentation Video
 
-**Video Link:** INSERT_LINK
+**Video Link:** https://www.youtube.com/watch?v=PuRd0dScX3k 
 
 | Timestamp | Content | Presenter |
 |---|---|---|
-| 00:00–02:00 | Game overview and three stages | Haziq |
-| 02:00–06:00 | Gameplay demonstration and outcomes | Jenna |
-| 06:00–10:00 | Class diagrams and design evolution | Hui Shin |
-| 10:00–13:00 | Sequence diagram and selected use case | Rachel |
-| 13:00–15:00 | Individual contributions and reflections | All members |
+| 00:00–01:04 | Game overview and three stages | Haziq |
+| 01:05–05:59 | Gameplay demonstration and outcomes | Jenna |
+| 06:00–10:57 | Class diagrams and design evolution | Hui Shin |
+| 10:58–14:12 | Sequence diagram and selected use case | Rachel |
+| 14:13–14:31 | Individual contributions and conclusion | Haziq |
 
 | Stage / Git-Tag | Description |
 | ------------- | ------------- |
