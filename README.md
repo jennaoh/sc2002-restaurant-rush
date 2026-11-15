@@ -62,7 +62,7 @@ The above classes was added to accommodate the new customer types (VIP & Critic)
 - Table.java
    - Edited toString() method to include customer type
 - Cashier.java
-   - TODO
+   - Changed to use customer's calculateBill(basePriceCents) method as VIP customer will have a discount
 - Waiter.java
    - Changed to use customer's getOrderPreference() method as customers(critics) have order preferences
 
@@ -111,7 +111,7 @@ The files below were added purely for GitHub purpose and has no relation to the 
 - Waiter.java
    - Add logic to apply VIP customer discount first before Happy Hour discount
 - Cashier.java
-   - TODO
+   - Reverted back to returning order's getBillCents() instead of using customer's calculateBill in Stage 2 as the price is now calculated by the Waiter class which takes into consideration VIP discount and Happy Hour discount. Waiter then creates a order with the calculated price so order getBillCents() will already have the price after discounts.
 
 The classes below was marked as changed on GitHub's compare probably due to how we committed separate commits on Stage 2 & 3 to print customer type for the user.
 In actual fact, there is no change as Stage 2 should already have had these changes made.
