@@ -10,6 +10,8 @@
 
 **Purpose:** Asking AI where customer order is decided and spawning logic as I was checking out stage 2 & 3 for the first time and wanted to check the customer types as at this point, we were not printing the customer type on screen.
 
+Images of AI chat is found [here](https://github.com/jennaoh/sc2002-restaurant-rush/tree/hz-branch/ai-history/stage-3)
+
 ---
 
 ## Conversation 1 — Customer Order Logic
